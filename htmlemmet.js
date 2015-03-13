@@ -3,6 +3,11 @@ function recursive(element) {
     var tag = element.tagName;
     if (tag) {
         emtStr += tag.toLowerCase();
+        if (element.className.length) {
+            var classes = element.className.split(/\s+/).join(".");
+            emtStr += "." + classes;
+        }
+		
         var children = element.childNodes;
         if (children.length > 0) {
             var childRets = [];
@@ -15,8 +20,7 @@ function recursive(element) {
             if (childRets.length) emtStr += ">" + childRets.join("+") + "^";
         }
     }
-    emtStr = emtStr.replace(/\^\+/g, "^");
-
+    emtStr = emtStr.replace(/\^\+/g, "^"); //TODO: Remove this hack
     return emtStr;
 }
 console.log(recursive(document.documentElement));

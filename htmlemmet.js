@@ -1,6 +1,8 @@
 function recursive(element) {
     var emtStr = "";
     var tag = element.tagName;
+    if(tag==="SCRIPT")
+        return "";
     if (tag) {
         emtStr += tag.toLowerCase();
         if (element.className.length) {
@@ -13,6 +15,9 @@ function recursive(element) {
             var childRets = [];
             for (var i = 0; i < children.length; i++) {
                 if (children[i].nodeType !== 1) {
+                    if ((children[i].nodeType === 3) && (children[i].nodeValue.replace(/^\s+|\s+$/gm,'').length !== 0)) 
+                        childRets.push("{" + children[i].nodeValue + "}");
+                    else
                         continue;
                 }
                 childRets.push(recursive(children[i]));
@@ -21,6 +26,7 @@ function recursive(element) {
         }
     }
     emtStr = emtStr.replace(/\^\+/g, "^"); //TODO: Remove this hack
+    emtStr = emtStr.replace(/\n/g, "");
     return emtStr;
 }
 console.log(recursive(document.documentElement));
